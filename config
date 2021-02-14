@@ -1,0 +1,289 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;==========================================================
+
+
+[colors]
+background = #2E3440
+;1from darkest to lightest
+blue01 = #353e4b 
+blue02 = #3c4857
+blue03 = #435262 
+blue04 = #4a5c6e
+blue05 = #50677a 
+blue06 = #577286 
+
+foreground = #ffffff
+
+
+;=========================================================
+;	Primary Bar : eDp-1
+;=========================================================
+
+[bar/primary]
+monitor			= eDP1
+width			= 100%
+height 			= 27
+offset-x 		= 0
+offset-y 		= 0
+radius 			= 0
+fixed-center 		= false
+
+background		= ${colors.background}
+foreground 		= ${colors.foreground}
+
+line-size 		= 3
+line-color 		= #00000000
+
+padding-left 		= 0
+padding-right 		= 0
+
+module-margin-left 	= 0
+module-margin-right 	= 0
+
+font-0 			= fixed:pixelsize:size=10;2
+font-1 			= Font Awesome 5 Free Solid:style=Solid:size=12;2.7
+font-2			= Font Awesome 5 Brands Regular:style=Regular:size=12;2
+
+modules-left 		= workspaces
+modules-center		= xwindow
+modules-right 		= cpu memory filesystem  wireless-network wired-network pulseaudio battery date
+
+tray-position 		= none
+
+
+
+;=========================================================
+;	Secondary Bar : HDMI-1
+;=========================================================
+
+[bar/secondary]
+monitor			= HDMI1
+width			= 100%
+height 			= 27
+offset-x 		= 0
+offset-y 		= 0
+radius 			= 0
+fixed-center 		= false
+
+background		= ${colors.background}
+foreground 		= ${colors.foreground}
+
+line-size 		= 3
+line-color 		= #00000000
+
+padding-left 		= 0
+padding-right 		= 0
+
+module-margin-left 	= 0
+module-margin-right 	= 0
+
+font-0 			= fixed:pixelsize:size=10;2
+font-1 			= Font Awesome 5 Free Solid:style=Solid:size=12;2.7
+font-2			= Font Awesome 5 Brands Regular:style=Regular:size=12;2
+
+modules-left 		= workspaces
+modules-center		= xwindow
+modules-right 		= spotify cpu memory filesystem wireless-network wired-network pulseaudio battery date
+
+tray-position 		= none
+
+
+;========================================================
+;			MODULES
+;========================================================
+
+[module/workspaces]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+pin-workspaces = true
+
+stripping-wsnumber = false;
+
+label-mode-padding = 1
+label-mode-foreground = ${colors.foreground}
+label-mode-background = #fff
+ 
+label-focused = %name% %icon%
+label-focused-background = ${colors.blue06}
+label-focused-foreground = #ffffff
+label-focused-padding-left = 3
+label-focused-padding-right = 2
+
+label-unfocused = %name% %icon%
+label-unfocused-background = ${colors.blue01}
+label-unfocused-foreground = #ffffff
+label-unfocused-padding-left = 3
+label-unfocused-padding-right = 2
+
+label-urgent = %name% %icon%
+label-urgent-background = #FF0000
+label-urgent-padding-left = 3
+label-urgent-padding-right = 2
+
+label-visible = %name% %icon%
+label-visible-background = ${colors.blue01}
+label-visible-foreground = #ffffff
+label-visible-padding-left = 3
+label-visible-padding-right = 2
+
+
+
+;=======================================================
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:30:30: ...%
+label-minlen = 20
+label-padding-left= 50
+label-padding-right = 50
+label-align-center = true
+label-font = 1
+
+;=====================================================
+
+[module/spotify]
+type = custom/script
+interval = 1
+format = %{T3}%{T-} <label>
+exec = python ~/.config/polybar/script/spotify.py
+format-background = ${colors.blue02}
+format-padding = 3
+
+;====================================================
+
+[module/memory]
+type = internal/memory
+interval = 2
+label =   %mb_used%
+label-background = ${colors.blue01}
+label-padding = 2
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+label =  %percentage:2%%
+label-background = ${colors.blue01}
+label-padding = 2
+
+
+;====================================================
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+format-mounted = <label-mounted>
+
+mount-0 = /
+
+label-mounted = %{F#4c2f80}%mountpoint%%{F-}: %percentage_used%% of %total%
+label-mounted-padding = 3
+label-mounted-background = ${colors.blue02}
+
+;==================================================
+
+[module/wireless-network]
+type = internal/network
+interface = wlp3s0
+label-connected =%{T2}%{T-} %essid%
+label-connected-background = ${colors.blue03} 
+label-connected-padding = 3
+;====================================================
+
+[module/wired-network]
+type = internal/network
+interface = enp0s20f0u3
+
+label-connected = %{T2}%{T-} %local_ip%  
+label-connected-padding = 3
+label-connected-background = ${colors.blue03}
+
+label-disconnected =%{T2}%{T-} not connected 
+label-disconnected-background = ${colors.blue05}
+
+;=====================================================
+
+[module/pulseaudio]
+type = internal/pulseaudio
+format-volume = <label-volume>
+label-volume-padding = 3
+label-volume = %{T2}%{T-}  %percentage%%
+label-volume-foreground = ${root.foreground}
+label-volume-font = 6
+label-volume-muted = 6
+label-muted =%{T2}%{T-} %percentage%%
+label-muted-foreground = #666
+label-volume-background = ${colors.blue04}
+interval = 2
+
+;======================================================
+
+[module/battery]
+type = internal/battery
+battery = BAT1
+adapter = ADP1
+full_at = 98
+
+format-charging = <label-charging>
+format-discharging = <label-discharging>
+
+label-charging = %{T2}%{T-} %percentage%%
+label-discharging =%{T2}%{T-} %percentage%%
+label-full = %{T2}%{T-} %percentage%%
+
+label-charging-padding = 3
+label-discharging-padding = 3
+label-full-padding = 3
+
+label-charging-background = ${colors.blue05}
+label-discharging-background = ${colors.blue05} 
+label-full-background = ${colors.blue05} 
+
+
+ramp-capacity-0 =
+ramp-capacity-1 =
+ramp-capacity-2 =
+ramp-capacity-foreground = ${colors.foreground-alt}
+
+animation-charging-0 = %{T2}%{T-} 
+animation-charging-1 = %{T2}%{T-} 
+animation-charging-2 = %{T2}%{T-} 
+animation-charging-foreground = ${colors.foreground}
+animation-charging-framerate = 750
+
+animation-discharging-0 = %{T2}%{T-} 
+animation-discharging-1 = %{T2}%{T-} 
+animation-discharging-2 = %{T2}%{T-} 
+animation-discharging-foreground = ${colors.foreground}
+animation-discharging-framerate = 750
+
+
+;======================================================
+
+[module/date]
+
+;onClick shows date left of time
+type = internal/date
+interval = 5
+
+date-alt = " %m/%d"
+
+time = %H:%M
+time-alt = %H:%M
+
+;format-prefix 
+
+label = %{T2}%{T-} %{T3}%date% %time%%{T-}
+label-font = 3
+label-padding = 3
+label-background = ${colors.blue06}
+label-foreground = ${colors.foreground} 
